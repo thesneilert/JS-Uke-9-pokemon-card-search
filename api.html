@@ -1,0 +1,51 @@
+<script>
+      const app = document.getElementById("app");
+      let userID = null;
+      let title = "";
+      let isCompleted = false;
+      view();
+      function view() {
+        app.innerHTML = `
+        Denne brukeren her id: ${userID},<br>
+        Oppgaven h*n har er: ${title} <br>
+        og den er ${
+          isCompleted == true ? "ferdigstilt" : "ikke ferdigstilt"
+        }.<br>
+        <button onclick="fetchAPI()">Hent data fra bruker 1 </button>
+        `;
+      }
+
+      //hente en spesifikk ting - todo nr 1
+      async function fetchAPI() {
+        let response = await fetch(
+          "https://jsonplaceholder.typicode.com/todos/1"
+        );
+        let data = await response.text();
+        //Tips! logg alltid ut responsen du får, så ser du hva feltene i objektene heter,
+        //og ikke minst hvilke data du har å kose deg med der :D
+        console.log(data);
+        data = JSON.parse(data); // gjør om JSON til et javascript object med parse
+
+        //lagre da data du trenger fra API'et io modellen
+        userID = data.userId;
+        title = data.title;
+        isCompleted = data.completed;
+
+        view(); //kall på viewet for å se freshe nice data :D
+      }
+
+      //hente flere ting (ANER ikke hvor stort dette dummydata APIet er så tør ikke bruke .lenght i frykt for kræsj, derfor 10 :P)
+      let arrayOfThings = [];
+      async function fetchMASS() {
+        for (let i = 0; i <= 10; i++) {
+          let response = await fetch(
+            `https://jsonplaceholder.typicode.com/todos/${i}`
+          );
+          let data = await response.text();
+          console.log(data);
+          data = JSON.parse(data); // gjør om JSON til et javascript object med parse
+          arrayOfThings.push(data);
+        }
+        console.log(arrayOfThings);
+      }
+    </script>
